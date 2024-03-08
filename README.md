@@ -1,8 +1,7 @@
 # Portfolio-architecte-sophie-bluel
 
-Code du projet 6 d'intégrateur web.
+3rd project for OpenClassrooms's Web Dev training.
 
-## Information pour le lancer le code
-
- - Lancer le backend depuis votre terminal en suivant les instruction du fichier ReadMe.
- - Si vous désirez afficher le code du backend et du frontend, faites le dans 2 instances de VSCode différentes pour éviter tout problème
+## informations
+- Start backend from terminal (check the readme files)
+- If you want to have both frontend and backend, please use 2 VScode instances to avoid any issue
