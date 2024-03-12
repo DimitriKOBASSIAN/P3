@@ -41,3 +41,45 @@ function genererOeuvres(oeuvres){
 }
 
 genererOeuvres(oeuvres);
+
+
+// Filtre Objets
+const BtnFilterAll = document.querySelector(".btn-filter-all");
+BtnFilterAll.addEventListener("click", function () {
+    const OeuvresAll = oeuvres.filter(function (oeuvres) {
+        return oeuvres.categoryId !== null;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererOeuvres(OeuvresAll);
+});
+
+// Filtre Objets
+const BtnFilterObjets = document.querySelector(".btn-filter-Objets");
+BtnFilterObjets.addEventListener("click", function () {
+    const OeuvresObjets = oeuvres.filter(function (oeuvres) {
+        return oeuvres.categoryId === 1;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererOeuvres(OeuvresObjets);
+});
+
+// Filtre Appartements & Villa
+const BtnFilterApptVilla = document.querySelector(".btn-filter-appt-villa");
+BtnFilterApptVilla.addEventListener("click", function () {
+    const OeuvresApptVilla = oeuvres.filter(function (oeuvres) {
+        return oeuvres.categoryId === 2;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererOeuvres(OeuvresApptVilla);
+});
+
+// Filtre Hotels et restaurants
+const BtnFilterHotelResto = document.querySelector(".btn-filter-hotel-resto");
+BtnFilterHotelResto.addEventListener("click", function () {
+    const OeuvresHotelResto = oeuvres.filter(function (oeuvres) {
+        return oeuvres.categoryId === 3;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    genererOeuvres(OeuvresHotelResto);
+});
+
