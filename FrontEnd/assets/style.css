@@ -142,22 +142,17 @@ li:hover {
     margin-right: 10px;
     padding-left: 15px;
     padding-right: 15px;
-}
-
-.button-filter:hover {
-    background-color: #DEEBFF;
-}
-
-.button-filter i {
-    display: flex;
-}
-
-.button-filter span {
 	font-family: 'Syne';
 	font-size:16px;
-	letter-spacing: 0.1em;
 	color: #1D6154
 }
+
+.button-filter:hover, .active {
+    background-color: #1D6154;
+	color: #FFFFFF;
+}
+
+
 
 .gallery {
 	width: 100%;

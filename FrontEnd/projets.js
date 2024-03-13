@@ -11,7 +11,7 @@ if (oeuvres === null){
 }else{
     oeuvres = JSON.parse(oeuvres);
 }
-console.log(oeuvres)
+/* console.log(oeuvres) */
 
 function genererOeuvres(oeuvres){
 
@@ -83,3 +83,14 @@ BtnFilterHotelResto.addEventListener("click", function () {
     genererOeuvres(OeuvresHotelResto);
 });
 
+// Changement de couleur des boutons lors du clic pour filtrer
+
+const btns = document.querySelectorAll(".button-filter");
+btns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+        btns.forEach(function (btn) {
+            btn.classList.remove("active");
+        });
+        btn.classList.add("active");
+    });
+});
