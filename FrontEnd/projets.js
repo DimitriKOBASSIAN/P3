@@ -1,17 +1,15 @@
-let oeuvres = window.localStorage.getItem('oeuvres');
+// Call des projets depuis le localStorage
 
-if (oeuvres === null){
-   // Récupération des oeuvres depuis l'API
+let oeuvres;
+
+// Récupération des oeuvres depuis l'API
+try {
     const reponse = await fetch('http://localhost:5678/api/works/');
     oeuvres = await reponse.json();
-   // Transformation des oeuvres en JSON
-    const valeurOeuvres = JSON.stringify(oeuvres);
-   // Stockage des informations dans le localStorage
-    window.localStorage.setItem("oeuvres", valeurOeuvres);
-}else{
-    oeuvres = JSON.parse(oeuvres);
+} catch (error) {
+    console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
 }
-/* console.log(oeuvres) */
+console.log(oeuvres)
 
 function genererOeuvres(oeuvres){
 
@@ -84,7 +82,6 @@ BtnFilterHotelResto.addEventListener("click", function () {
 });
 
 // Changement de couleur des boutons lors du clic pour filtrer
-
 const btns = document.querySelectorAll(".button-filter");
 btns.forEach(function (btn) {
     btn.addEventListener("click", function () {
