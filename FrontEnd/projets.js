@@ -1,5 +1,3 @@
-// Call des projets depuis le localStorage
-
 let oeuvres;
 
 // Récupération des oeuvres depuis l'API
