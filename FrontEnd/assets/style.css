@@ -98,6 +98,17 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+li {
+	text-decoration: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	color: #B1663C
+}
 #introduction {
 	display: flex;
 	align-items: center;
@@ -248,9 +259,11 @@ footer nav ul {
 }
 
 .btmlgn {
-	position: fixed;
+	position: absolute;
 	bottom: 0;
 	right: 0;
 	padding-right: 3em;
 	padding-bottom: 2em;
+	margin: 0 auto;
 }
+
