@@ -17,12 +17,12 @@ fetch('http://localhost:5678/api/users/login', {
     email: form.email.value,
     password: form.password.value,
     }),
-}).then((response) => {
-    if (response.status !== 200) {
+}).then((response) => { // Check the response status
+    if (response.status !== 200) { // If the status is not 200, display an error message
     let errorText = document.querySelector(".error-text");
-    if (!errorText) {
+    if (!errorText) { // If the error message is not already displayed, create a new paragraph and display the error message
         errorText = document.createElement("p");
-        errorText.classList.add("error-text"); // add class for CSS styling
+        errorText.classList.add("error-text"); // add class for error's CSS styling
         errorText.textContent = "L'adresse email ou le mot de passe est incorrect. Veuillez réessayer.";
         document.body.appendChild(errorText);
     }
@@ -39,3 +39,16 @@ fetch('http://localhost:5678/api/users/login', {
     }
 });
 });
+
+// Check if a token is present in the SessionStorage
+if (sessionStorage.getItem("token")) {
+    // Modify the login element to a log out
+    let loginElement = document.getElementById("login");
+    loginElement.textContent = "log out";
+    loginElement.addEventListener("click", () => {
+        // Remove the token from the SessionStorage
+        sessionStorage.removeItem("token");
+        // Redirect to the login page
+        window.location.replace("login.html");
+    });
+}

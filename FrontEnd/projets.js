@@ -14,13 +14,13 @@ function generateWorks(works){
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
-        // Récupération de l'élément du DOM qui accueillera les fiches
+        // Selecting the DOM element that will host the fiches
         const sectionFiches = document.querySelector(".gallery");
 
-        // Création d’une balise dédiée à une figure
+        // Creating a tag dedicated to a figure
         const worksElement = document.createElement("figure");
 
-        // Création des balises
+        // Creating tags for the image, the title and the alt
         sectionFiches.appendChild(worksElement);
         const imageElement = document.createElement("img");
         imageElement.src = figure.imageUrl;
@@ -28,7 +28,7 @@ function generateWorks(works){
         const nomElement = document.createElement("figcaption");
         nomElement.innerText = figure.title;
 
-        // On rattache la balise article a la section Fiches
+        // Linking the article tag to the sectionFiches
         sectionFiches.appendChild(worksElement);
         worksElement.appendChild(imageElement);
         worksElement.appendChild(nomElement);
@@ -39,7 +39,7 @@ function generateWorks(works){
 generateWorks(works);
 
 
-// Filtre Objets
+// All Filter
 const BtnFilterAll = document.querySelector(".btn-filter-all");
 BtnFilterAll.addEventListener("click", function () {
     const worksAll = works.filter(function (works) {
@@ -49,7 +49,7 @@ BtnFilterAll.addEventListener("click", function () {
     generateWorks(worksAll);
 });
 
-// Filtre Objets
+// Objets Filter
 const BtnFilterObjets = document.querySelector(".btn-filter-Objets");
 BtnFilterObjets.addEventListener("click", function () {
     const worksObjets = works.filter(function (works) {
@@ -59,7 +59,7 @@ BtnFilterObjets.addEventListener("click", function () {
     generateWorks(worksObjets);
 });
 
-// Filtre Appartements & Villa
+// Appartements & Villa Filter
 const BtnFilterApptVilla = document.querySelector(".btn-filter-appt-villa");
 BtnFilterApptVilla.addEventListener("click", function () {
     const worksApptVilla = works.filter(function (works) {
@@ -69,7 +69,7 @@ BtnFilterApptVilla.addEventListener("click", function () {
     generateWorks(worksApptVilla);
 });
 
-// Filtre Hotels et restaurants
+// Hotels et restaurants Filter
 const BtnFilterHotelResto = document.querySelector(".btn-filter-hotel-resto");
 BtnFilterHotelResto.addEventListener("click", function () {
     const worksHotelResto = works.filter(function (works) {
@@ -79,7 +79,7 @@ BtnFilterHotelResto.addEventListener("click", function () {
     generateWorks(worksHotelResto);
 });
 
-// Changement de couleur des boutons lors du clic pour filtrer
+// Changing button aspect when filter is active
 const btns = document.querySelectorAll(".button-filter");
 btns.forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -89,3 +89,37 @@ btns.forEach(function (btn) {
         btn.classList.add("active");
     });
 });
+
+// Check if a token is present in the SessionStorage
+if (sessionStorage.getItem("token")) {
+    // Modify the login element to a log out
+    let loginElement = document.getElementById("login");
+    loginElement.textContent = "log out";
+    loginElement.href = "index.html";
+    loginElement.classList.add("logged");
+    loginElement.addEventListener("click", () => {
+        // Remove the token from the SessionStorage
+        sessionStorage.removeItem("token");
+    });
+}
+
+// Check if a token is present in the SessionStorage
+if (sessionStorage.getItem("token")) {
+    // Modify the login element to a log out
+    let loginElement = document.getElementById("login");
+    loginElement.textContent = "log out";
+    loginElement.href = "index.html";
+    loginElement.classList.add("logged");
+    loginElement.addEventListener("click", () => {
+        // Remove the token from the SessionStorage
+        sessionStorage.removeItem("token");
+    });
+
+    // Create a new banner element
+    let banner = document.createElement('div');
+    banner.textContent = 'Vous êtes connecté.';
+    banner.classList.add('banner');
+
+    // Add the banner to the top of the body
+    document.body.insertBefore(banner, document.body.firstChild);
+}

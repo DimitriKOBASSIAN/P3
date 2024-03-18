@@ -273,3 +273,18 @@ footer nav ul {
 	display: flex;
 	justify-content: center;
 }
+
+.logged {
+	font-weight: 700;
+}
+
+.banner {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	padding: 10px;
+	background-color: #000000;
+	color:#FFFFFF;
+	text-align: center;
+}
