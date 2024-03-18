@@ -39,44 +39,41 @@ function generateWorks(works){
 generateWorks(works);
 
 
+// Function to filter works based on category
+function filterWorks(categoryId) {
+    const filteredWorks = works.filter(function (work) {
+        return work.categoryId === categoryId;
+    });
+    document.querySelector(".gallery").innerHTML = "";
+    generateWorks(filteredWorks);
+}
+
 // All Filter
-const BtnFilterAll = document.querySelector(".btn-filter-all");
-BtnFilterAll.addEventListener("click", function () {
-    const worksAll = works.filter(function (works) {
-        return works.categoryId !== null;
+const btnFilterAll = document.querySelector(".btn-filter-all");
+btnFilterAll.addEventListener("click", function () {
+    const worksAll = works.filter(function (work) {
+        return work.categoryId !== null;
     });
     document.querySelector(".gallery").innerHTML = "";
     generateWorks(worksAll);
 });
 
 // Objets Filter
-const BtnFilterObjets = document.querySelector(".btn-filter-Objets");
-BtnFilterObjets.addEventListener("click", function () {
-    const worksObjets = works.filter(function (works) {
-        return works.categoryId === 1;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(worksObjets);
+const btnFilterObjets = document.querySelector(".btn-filter-Objets");
+btnFilterObjets.addEventListener("click", function () {
+    filterWorks(1);
 });
 
 // Appartements & Villa Filter
-const BtnFilterApptVilla = document.querySelector(".btn-filter-appt-villa");
-BtnFilterApptVilla.addEventListener("click", function () {
-    const worksApptVilla = works.filter(function (works) {
-        return works.categoryId === 2;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(worksApptVilla);
+const btnFilterApptVilla = document.querySelector(".btn-filter-appt-villa");
+btnFilterApptVilla.addEventListener("click", function () {
+    filterWorks(2);
 });
 
 // Hotels et restaurants Filter
-const BtnFilterHotelResto = document.querySelector(".btn-filter-hotel-resto");
-BtnFilterHotelResto.addEventListener("click", function () {
-    const worksHotelResto = works.filter(function (works) {
-        return works.categoryId === 3;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(worksHotelResto);
+const btnFilterHotelResto = document.querySelector(".btn-filter-hotel-resto");
+btnFilterHotelResto.addEventListener("click", function () {
+    filterWorks(3);
 });
 
 // Changing button aspect when filter is active
@@ -105,7 +102,7 @@ if (sessionStorage.getItem("token")) {
 
 // Check if a token is present in the SessionStorage
 if (sessionStorage.getItem("token")) {
-    // Modify the login element to a log out
+    // Modify the login li element to display "log out" bold text. Modify the href to the login page
     let loginElement = document.getElementById("login");
     loginElement.textContent = "log out";
     loginElement.href = "index.html";

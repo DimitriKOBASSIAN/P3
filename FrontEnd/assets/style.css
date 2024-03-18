@@ -109,6 +109,14 @@ a {
 a:hover {
 	color: #B1663C
 }
+
+a:visited {
+	color: #000000;
+}
+
+a:hover:visited {
+	color: #B1663C;
+}
 #introduction {
 	display: flex;
 	align-items: center;
