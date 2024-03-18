@@ -267,3 +267,9 @@ footer nav ul {
 	margin: 0 auto;
 }
 
+.error-text {
+	color: red;
+	font-size: 1em;
+	display: flex;
+	justify-content: center;
+}
