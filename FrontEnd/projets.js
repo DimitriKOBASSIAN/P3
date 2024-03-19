@@ -40,40 +40,53 @@ generateWorks(works);
 
 
 // Function to filter works based on category
-function filterWorks(categoryId) {
-    const filteredWorks = works.filter(function (work) {
-        return work.categoryId === categoryId;
-    });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(filteredWorks);
+async function fetchCategories() {
+    try {
+        const response = await fetch('http://localhost:5678/api/categories/');
+        return await response.json();
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
+    }
 }
 
-// All Filter
-const btnFilterAll = document.querySelector(".btn-filter-all");
-btnFilterAll.addEventListener("click", function () {
-    const worksAll = works.filter(function (work) {
-        return work.categoryId !== null;
-    });
+function generateCategories(id) {
+    const filteredCategories = categories.filter(category => category.id === id);
     document.querySelector(".gallery").innerHTML = "";
-    generateWorks(worksAll);
+    generateWorks(filteredCategories);
+}
+
+function filteredCategories(id) {
+    if (id === null) {
+        document.querySelector(".gallery").innerHTML = "";
+        generateWorks(works);
+    } else {
+        const filteredWorks = works.filter(work => work.categoryId === id);
+        document.querySelector(".gallery").innerHTML = "";
+        generateWorks(filteredWorks);
+    }
+}
+
+// Fetch categories from the API and store them in the categories variable
+let categories = [];
+fetchCategories().then(data => {
+    categories = data;
+    console.log(categories);
 });
 
-// Objets Filter
-const btnFilterObjets = document.querySelector(".btn-filter-Objets");
-btnFilterObjets.addEventListener("click", function () {
-    filterWorks(1);
-});
+// Filter buttons
+const filterButtons = [
+    { selector: ".btn-filter-all", categoryId: null },
+    { selector: ".btn-filter-Objets", categoryId: 1 },
+    { selector: ".btn-filter-appt-villa", categoryId: 2 },
+    { selector: ".btn-filter-hotel-resto", categoryId: 3 }
+];
 
-// Appartements & Villa Filter
-const btnFilterApptVilla = document.querySelector(".btn-filter-appt-villa");
-btnFilterApptVilla.addEventListener("click", function () {
-    filterWorks(2);
-});
-
-// Hotels et restaurants Filter
-const btnFilterHotelResto = document.querySelector(".btn-filter-hotel-resto");
-btnFilterHotelResto.addEventListener("click", function () {
-    filterWorks(3);
+// Add event listeners to filter buttons
+filterButtons.forEach(button => {
+    const btn = document.querySelector(button.selector);
+    btn.addEventListener("click", function () {
+        filteredCategories(button.categoryId);
+    });
 });
 
 // Changing button aspect when filter is active
@@ -100,6 +113,7 @@ if (sessionStorage.getItem("token")) {
     });
 }
 
+// Modifying the header style and behaviour when the user is logged in
 // Check if a token is present in the SessionStorage
 if (sessionStorage.getItem("token")) {
     // Modify the login li element to display "log out" bold text. Modify the href to the login page
@@ -114,7 +128,7 @@ if (sessionStorage.getItem("token")) {
 
     // Create a new banner element
     let banner = document.createElement('div');
-    banner.textContent = 'Vous êtes connecté.';
+    banner.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
     banner.classList.add('banner');
 
     // Add the banner to the top of the body

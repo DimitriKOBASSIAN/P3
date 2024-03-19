@@ -40,6 +40,7 @@ fetch('http://localhost:5678/api/users/login', {
 });
 });
 
+// Modfying the header style wehn the user is logged in
 // Check if a token is present in the SessionStorage
 if (sessionStorage.getItem("token")) {
     // Modify the login element to a log out
