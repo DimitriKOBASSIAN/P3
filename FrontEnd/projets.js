@@ -1,6 +1,6 @@
+// Fetch works from the API and store them in the oeuvres variable
 let works;
 
-// Fetch works from the API and store them in the oeuvres variable
 try {
     const reponse = await fetch('http://localhost:5678/api/works/');
     works = await reponse.json();
@@ -47,12 +47,6 @@ async function fetchCategories() {
     } catch (error) {
         console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
     }
-}
-
-function generateCategories(id) {
-    const filteredCategories = categories.filter(category => category.id === id);
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(filteredCategories);
 }
 
 function filteredCategories(id) {
@@ -104,7 +98,7 @@ btns.forEach(function (btn) {
 if (sessionStorage.getItem("token")) {
     // Modify the login element to a log out
     let loginElement = document.getElementById("login");
-    loginElement.textContent = "log out";
+    loginElement.textContent = "logout";
     loginElement.href = "index.html";
     loginElement.classList.add("logged");
     loginElement.addEventListener("click", () => {
@@ -118,7 +112,7 @@ if (sessionStorage.getItem("token")) {
 if (sessionStorage.getItem("token")) {
     // Modify the login li element to display "log out" bold text. Modify the href to the login page
     let loginElement = document.getElementById("login");
-    loginElement.textContent = "log out";
+    loginElement.textContent = "logout";
     loginElement.href = "index.html";
     loginElement.classList.add("logged");
     loginElement.addEventListener("click", () => {
