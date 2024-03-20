@@ -94,19 +94,6 @@ btns.forEach(function (btn) {
     });
 });
 
-// Check if a token is present in the SessionStorage
-if (sessionStorage.getItem("token")) {
-    // Modify the login element to a log out
-    let loginElement = document.getElementById("login");
-    loginElement.textContent = "logout";
-    loginElement.href = "index.html";
-    loginElement.classList.add("logged");
-    loginElement.addEventListener("click", () => {
-        // Remove the token from the SessionStorage
-        sessionStorage.removeItem("token");
-    });
-}
-
 // Modifying the header style and behaviour when the user is logged in
 // Check if a token is present in the SessionStorage
 if (sessionStorage.getItem("token")) {
