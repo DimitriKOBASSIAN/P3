@@ -192,7 +192,7 @@ function openModal() {
 
     //add event listener to the add image button to console.log "you tried to add an image"
     addImageButton.addEventListener("click", () => {
-        console.log("You tried to add an image");
+        console.log("Opening the page to add image");
         // Completely empty the modal content
         content.innerHTML = '';
         //add a back button to the modal content
@@ -223,10 +223,34 @@ function openModal() {
         const form = document.createElement("form");
         form.classList.add("add-image-form");
         // Create an input for uploading an image
+        const imageUpload = document.createElement("div");
+        imageUpload.classList.add("image-upload");
+        // Create a label for the image input
+        const imageLabel = document.createElement("label");
+        imageLabel.setAttribute("for", "image");
+        imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
+        imageUpload.appendChild(imageLabel);
+        // Create a button to add an image
+        const imageUploaButton = document.createElement("button");
+        imageUploaButton.classList.add("image-upload-button");
+        imageUploaButton.textContent = " + Ajouter photo";
+        const imageParameter = document.createElement("p");
+        imageParameter.classList.add("image-parameter");
+        imageParameter.textContent = ".jpg, .png : 4Mo max";
+
+
+        // Create an input for the image
         const imageInput = document.createElement("input");
         imageInput.setAttribute("type", "file");
-        imageInput.setAttribute("accept", "image/*");
+        imageInput.setAttribute("accept", "image/jpeg, image/png");
         imageInput.classList.add("image-input");
+        
+// add eventListener to the imageUploadButton to trigger the imageInput without clicking on it
+imageUploaButton.addEventListener("click", () => {
+    imageInput.click();
+});
+
+
         // Add event listener to the add image button to preview the selected image
         imageInput.addEventListener("change", (event) => {
             const file = event.target.files[0];
@@ -241,25 +265,45 @@ function openModal() {
         });
         // create a title input
         const titleInput = document.createElement("input");
+        titleInput.classList.add("title-input");
+        titleInput.setAttribute("id", "title");
+        titleInput.setAttribute("name", "title");
+        titleInput.setAttribute("required", "required");
+        titleInput.setAttribute("maxlength", "50");
+        titleInput.setAttribute("minlength", "3");
+        titleInput.setAttribute("size", "50");
+        titleInput.setAttribute("autocomplete", "off");
+        titleInput.setAttribute("autofocus", "autofocus");
         titleInput.setAttribute("type", "text");
         titleInput.setAttribute("placeholder", "Titre de l'image");
+
+        // create a paragraph element
+        const titleParagraph = document.createElement("p");
+        titleParagraph.classList.add("title-paragraph");
+        titleParagraph.textContent = "Titre";
+        titleParagraph.appendChild(titleInput);
         // Create a submit button
         const submitButton = document.createElement("button");
         submitButton.setAttribute("type", "submit");
-        submitButton.textContent = "Ajouter";
+        submitButton.textContent = "Valider";
         submitButton.classList.add("submit-button");
         // Append the inputs and the submit button to the form
-        form.appendChild(imageInput);
+        form.appendChild(imageUpload);
+        imageUpload.appendChild(imageUploaButton);
+        imageUpload.appendChild(imageInput);
+        imageUpload.appendChild(imageParameter);
+        form.appendChild(titleParagraph);
         form.appendChild(titleInput);
         form.appendChild(submitButton);
         // Append the form to the modal content
         content.appendChild(form);
         // Prevent the default action of the form
-        form.addEventListener("submit", (event) => {
+        submitButton.addEventListener("submit", (event) => {
             event.preventDefault();
             console.log("You tried to add an image");
         });
     });
+
 
     // Add event listener to the close button to close the modal when clicked
     closeButton.addEventListener("click", closeModal);

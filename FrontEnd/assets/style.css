@@ -424,4 +424,53 @@ hr {
 .previewImg {
 	width: 15%;
 	height: 15%;
-	margin: 1%;}
+	margin: 1%;
+}
+
+.title-paragraph {
+	font-family: "work sans";
+	font-weight: 500;
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 5px;
+}
+
+.fa-image {
+	display: flex;
+	font-size: 84px;
+	color: #B9C5CC	;
+	justify-content: center;
+}
+
+.image-upload {
+	background-color: #EBF1F6;
+	border-radius: 4px;
+	margin: auto 15%;
+	padding-top: 20px;
+}
+
+.image-upload-button {
+	display: flex;
+	align-items: center;
+	justify-content: center; /* Add this line */
+	height: 36px;
+	background-color: #B9C5CC	;
+	border: 1px solid #B9C5CC	;
+	border-radius: 50px;
+	margin: 15px auto;
+	padding: 20px 30px;
+	font-family: 'syne';
+	font-size: 16px;
+	color: #306685;
+}
+
+.image-input {
+	display: none;
+}
+
+.image-parameter {
+	display: flex;
+	justify-content: center;
+	padding-bottom: 20px;
+}
