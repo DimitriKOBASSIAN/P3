@@ -105,3 +105,178 @@ if (sessionStorage.getItem("token")) {
     // Add the banner to the top of the body
     document.body.insertBefore(banner, document.body.firstChild);
 }
+
+// add a modifier link next to the Mes Projets title when the user is logged in
+if (sessionStorage.getItem("token")) {
+    let modifierLink = document.createElement('a');
+    modifierLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Modifier';
+    modifierLink.classList.add('modifier-link');
+    modifierLink.href = "#"; // Add the desired href for the link
+    document.querySelector('.mes-projets').appendChild(modifierLink);
+}
+
+// Function to open the modal
+function openModal() {
+    // Create the modal element
+    const modal = document.createElement("div");
+    modal.classList.add("modal");
+
+    // Create the content element
+    const content = document.createElement("div");
+    content.classList.add("modal-content");
+
+    // Add the content to the modal
+    modal.appendChild(content);
+
+    // Add a close button to the modal content
+    const closeButton = document.createElement("button");
+    closeButton.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    closeButton.classList.add("close-button");
+    content.appendChild(closeButton);
+
+    // Add a title to the modal content
+    const modalTitle = document.createElement("h2");
+    modalTitle.textContent = "Galerie photo";
+    content.appendChild(modalTitle);
+    modalTitle.classList.add("modal-title");
+
+    // Create the gallery element
+    const gallery = document.createElement("div");
+    gallery.classList.add("gallery-modal");
+
+    // Loop through the works and create image elements with delete buttons
+    works.forEach(work => {
+        const miniImg = document.createElement("div");
+            miniImg.classList.add("mini-img");
+        const imageElement = document.createElement("img");
+            imageElement.src = work.imageUrl;
+            imageElement.alt = work.title;        
+        const deleteButton = document.createElement("button");
+            deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+            deleteButton.classList.add("delete-button");
+        gallery.appendChild(miniImg);
+        miniImg.appendChild(imageElement);
+        miniImg.appendChild(deleteButton);
+    });
+
+    // Add the gallery to the modal content
+    content.appendChild(gallery);
+
+    // add a separator under the gallery
+    const separator = document.createElement("hr");
+    content.appendChild(separator);
+
+    // add a button to add a new image to the gallery
+    const addImageButton = document.createElement("button");
+    addImageButton.textContent = "Ajouter une photo";
+    addImageButton.classList.add("button-addimg");
+    content.appendChild(addImageButton);
+
+    // Add the modal to the body
+    document.body.appendChild(modal);
+
+    //Add event listner to conole.log "you tried to delete an image" when clicking on the delete button
+    const deleteButtons = document.querySelectorAll(".delete-button");  
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.addEventListener("click", () => {
+            console.log("You tried to delete the image");
+        });
+    });
+
+    // Add event listener to close the modal when clicking outside of the modal-content
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    //add event listener to the add image button to console.log "you tried to add an image"
+    addImageButton.addEventListener("click", () => {
+        console.log("You tried to add an image");
+        // Completely empty the modal content
+        content.innerHTML = '';
+        //add a back button to the modal content
+        const backButton = document.createElement("button");
+        backButton.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+        backButton.classList.add("back-button");
+        content.appendChild(backButton);
+        // Add event listener to the back button to go back to the gallery
+        backButton.addEventListener("click", () => {
+            content.innerHTML = '';
+            content.appendChild(closeButton);
+            content.appendChild(modalTitle);
+            content.appendChild(gallery);
+            content.appendChild(separator);
+            content.appendChild(addImageButton);
+        });
+
+        // Add the close button to the modal content
+        content.appendChild(closeButton);
+        // Add the title to the modal content
+        const modalTitleAdd = document.createElement("h2");
+        modalTitleAdd.textContent = "Ajout photo";
+        content.appendChild(modalTitleAdd);
+        modalTitleAdd.classList.add("modal-title");
+        content.appendChild(modalTitleAdd);
+        
+        // Create a form element
+        const form = document.createElement("form");
+        form.classList.add("add-image-form");
+        // Create an input for uploading an image
+        const imageInput = document.createElement("input");
+        imageInput.setAttribute("type", "file");
+        imageInput.setAttribute("accept", "image/*");
+        imageInput.classList.add("image-input");
+        // Add event listener to the add image button to preview the selected image
+        imageInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const previewImage = document.createElement("img");
+                previewImage.classList.add("previewImg");
+                previewImage.src = e.target.result;
+                content.appendChild(previewImage);
+            };
+            reader.readAsDataURL(file);
+        });
+        // create a title input
+        const titleInput = document.createElement("input");
+        titleInput.setAttribute("type", "text");
+        titleInput.setAttribute("placeholder", "Titre de l'image");
+        // Create a submit button
+        const submitButton = document.createElement("button");
+        submitButton.setAttribute("type", "submit");
+        submitButton.textContent = "Ajouter";
+        submitButton.classList.add("submit-button");
+        // Append the inputs and the submit button to the form
+        form.appendChild(imageInput);
+        form.appendChild(titleInput);
+        form.appendChild(submitButton);
+        // Append the form to the modal content
+        content.appendChild(form);
+        // Prevent the default action of the form
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            console.log("You tried to add an image");
+        });
+    });
+
+    // Add event listener to the close button to close the modal when clicked
+    closeButton.addEventListener("click", closeModal);
+}
+
+// Function to close the modal
+function closeModal() {
+    // Remove the modal element
+    const modal = document.querySelector(".modal");
+    modal.remove();
+
+    // Remove the darken effect from the page
+    const page = document.querySelector("body");
+    page.classList.remove("darken");
+}
+
+// Add event listener to the modifier link
+const modifierLink = document.querySelector(".modifier-link");
+modifierLink.addEventListener("click", openModal);
+
