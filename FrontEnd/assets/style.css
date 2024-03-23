@@ -328,7 +328,7 @@ footer nav ul {
 	margin: 15% auto;
 	padding: 20px;
 	width: 30%; 
-	height: 45%;
+	height: 50%;
 	overflow: auto;
 	border-radius: 10px;
 	z-index: 2;
@@ -433,7 +433,23 @@ hr {
 	font-size: 16px;
 	display: flex;
 	flex-direction: column;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+.title-input {
+	font-family: "work sans";
+	font-weight: 500;
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
 	padding-bottom: 5px;
+	border: 1px solid #B9C5CC;
+	height: 50px;
+	width: 100%;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	padding-block: 0;
+    padding-inline: 0;
 }
 
 .fa-image {
@@ -446,7 +462,6 @@ hr {
 .image-upload {
 	background-color: #EBF1F6;
 	border-radius: 4px;
-	margin: auto 15%;
 	padding-top: 20px;
 }
 
@@ -473,4 +488,53 @@ hr {
 	display: flex;
 	justify-content: center;
 	padding-bottom: 20px;
+}
+
+.add-image-form {
+	margin: auto 15%;
+}
+
+.category-paragraph {
+	font-family: "work sans";
+	font-weight: 500;
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+.category-select {
+	width: 100%;
+	font-family: "work sans";
+	font-weight: 500;
+	font-size: 16px;
+	display: flex;
+	flex-direction: column;
+	padding-top: 5px;
+	padding-bottom: 15px;
+	border: 1px solid #B9C5CC;
+	height: 50px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	margin-bottom: 40px;
+}
+
+.form-separator {
+width: 100%;
+margin-bottom: 10px;
+}
+
+.image-submit-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 36px;
+	background-color: #a7a7a7	;
+	border: 1px solid #a7a7a7	;
+	border-radius: 50px;
+	margin: 30px auto;
+	padding: 18px 25%;
+	font-family: 'syne';
+	font-size: 16px;
+	color: #fefefe;
 }

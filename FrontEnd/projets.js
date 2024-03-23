@@ -9,6 +9,16 @@ try {
 }
 console.log(works)
 
+    // fetch the categories from the API
+    let categories;
+    try {
+        const response = await fetch('http://localhost:5678/api/categories/');
+        categories = await response.json();
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
+    }
+console.log(categories);
+
 function generateWorks(works){
 
     for (let i = 0; i < works.length; i++) {
@@ -275,15 +285,43 @@ imageUploaButton.addEventListener("click", () => {
         titleInput.setAttribute("autocomplete", "off");
         titleInput.setAttribute("autofocus", "autofocus");
         titleInput.setAttribute("type", "text");
-        titleInput.setAttribute("placeholder", "Titre de l'image");
 
         // create a paragraph element
         const titleParagraph = document.createElement("p");
         titleParagraph.classList.add("title-paragraph");
         titleParagraph.textContent = "Titre";
         titleParagraph.appendChild(titleInput);
+
+        // create a paragraph element for the category
+        const categoryParagraph = document.createElement("p");
+        categoryParagraph.classList.add("category-paragraph");
+        categoryParagraph.textContent = "Catégorie";
+        // Create a select element
+        const categorySelect = document.createElement("select");
+        categorySelect.classList.add("category-select");
+        categorySelect.setAttribute("id", "category");
+        categorySelect.setAttribute("name", "category");
+        categorySelect.setAttribute("required", "required");
+        // Create an option element for the default category
+        const defaultOption = document.createElement("option");
+        defaultOption.setAttribute("value", "");
+        defaultOption.textContent = " ";
+        categorySelect.appendChild(defaultOption);
+        // Create an option element for each category
+        categories.forEach(category => {
+            const option = document.createElement("option");
+            option.setAttribute("value", category.id);
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+
+            // add a separator for the form
+    const formSeparator = document.createElement("hr");
+    formSeparator.classList.add("form-separator");
+
         // Create a submit button
         const submitButton = document.createElement("button");
+        submitButton.classList.add("image-submit-button");
         submitButton.setAttribute("type", "submit");
         submitButton.textContent = "Valider";
         submitButton.classList.add("submit-button");
@@ -294,6 +332,9 @@ imageUploaButton.addEventListener("click", () => {
         imageUpload.appendChild(imageParameter);
         form.appendChild(titleParagraph);
         form.appendChild(titleInput);
+        form.appendChild(categoryParagraph);
+        form.appendChild(categorySelect);
+        form.appendChild(formSeparator)
         form.appendChild(submitButton);
         // Append the form to the modal content
         content.appendChild(form);
