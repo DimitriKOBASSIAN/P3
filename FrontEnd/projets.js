@@ -185,7 +185,7 @@ function openModal() {
     // Add the modal to the body
     document.body.appendChild(modal);
 
-    //Add event listner to conole.log "you tried to delete an image" when clicking on the delete button
+    //Add event listener to conole.log "you tried to delete an image" when clicking on the delete button
     const deleteButtons = document.querySelectorAll(".delete-button");  
     deleteButtons.forEach(deleteButton => {
         deleteButton.addEventListener("click", () => {
@@ -310,6 +310,7 @@ imageUploaButton.addEventListener("click", () => {
         // Create an option element for each category
         categories.forEach(category => {
             const option = document.createElement("option");
+            option.classList.add("category-option");
             option.setAttribute("value", category.id);
             option.textContent = category.name;
             categorySelect.appendChild(option);
