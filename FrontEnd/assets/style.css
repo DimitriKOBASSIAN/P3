@@ -427,9 +427,11 @@ hr {
 }
 
 .previewImg {
-	width: 15%;
-	height: 15%;
-	margin: 1%;
+	display: flex;
+	justify-content: center;
+	width: 25%;
+	height: 25%;
+	margin: 1% auto; /* Center the image horizontally */
 }
 
 .title-paragraph {

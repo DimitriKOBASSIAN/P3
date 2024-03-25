@@ -266,10 +266,11 @@ imageUploaButton.addEventListener("click", () => {
             const file = event.target.files[0];
             const reader = new FileReader();
             reader.onload = function (e) {
-                const previewImage = document.createElement("img");
-                previewImage.classList.add("previewImg");
-                previewImage.src = e.target.result;
-                content.appendChild(previewImage);
+            const previewImage = document.createElement("img");
+            previewImage.classList.add("previewImg");
+            previewImage.src = e.target.result;
+            imageLabel.innerHTML = '';
+            imageLabel.appendChild(previewImage);
             };
             reader.readAsDataURL(file);
         });
@@ -278,7 +279,6 @@ imageUploaButton.addEventListener("click", () => {
         titleInput.classList.add("title-input");
         titleInput.setAttribute("id", "title");
         titleInput.setAttribute("name", "title");
-        titleInput.setAttribute("required", "required");
         titleInput.setAttribute("maxlength", "50");
         titleInput.setAttribute("minlength", "3");
         titleInput.setAttribute("size", "50");
@@ -301,7 +301,7 @@ imageUploaButton.addEventListener("click", () => {
         categorySelect.classList.add("category-select");
         categorySelect.setAttribute("id", "category");
         categorySelect.setAttribute("name", "category");
-        categorySelect.setAttribute("required", "required");
+
         // Create an option element for the default category
         const defaultOption = document.createElement("option");
         defaultOption.setAttribute("value", "");
@@ -340,9 +340,13 @@ imageUploaButton.addEventListener("click", () => {
         // Append the form to the modal content
         content.appendChild(form);
         // Prevent the default action of the form
-        submitButton.addEventListener("submit", (event) => {
+        submitButton.addEventListener("click", (event) => {
             event.preventDefault();
-            console.log("You tried to add an image");
+            if (titleInput.value === "" || categorySelect.value === "") {
+                alert("Informations manquantes");
+            } else {
+                console.log("You tried to add an image with title: " + titleInput.value + " and category: " + categorySelect.value);
+            }
         });
     });
 
