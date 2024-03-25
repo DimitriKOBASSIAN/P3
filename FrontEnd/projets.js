@@ -255,22 +255,23 @@ function openModal() {
         imageInput.setAttribute("accept", "image/jpeg, image/png");
         imageInput.classList.add("image-input");
         
-// add eventListener to the imageUploadButton to trigger the imageInput without clicking on it
-imageUploaButton.addEventListener("click", () => {
-    imageInput.click();
-});
+        // add eventListener to the imageUploadButton to trigger the imageInput without clicking on it
+        imageUploaButton.addEventListener("click", () => {
+            imageInput.click();
+        });
 
 
         // Add event listener to the add image button to preview the selected image
         imageInput.addEventListener("change", (event) => {
+            event.preventDefault();
             const file = event.target.files[0];
             const reader = new FileReader();
             reader.onload = function (e) {
-            const previewImage = document.createElement("img");
-            previewImage.classList.add("previewImg");
-            previewImage.src = e.target.result;
-            imageLabel.innerHTML = '';
-            imageLabel.appendChild(previewImage);
+                const previewImage = document.createElement("img");
+                previewImage.classList.add("previewImg");
+                previewImage.src = e.target.result;
+                imageLabel.innerHTML = '';
+                imageLabel.appendChild(previewImage);
             };
             reader.readAsDataURL(file);
         });
@@ -316,9 +317,9 @@ imageUploaButton.addEventListener("click", () => {
             categorySelect.appendChild(option);
         });
 
-            // add a separator for the form
-    const formSeparator = document.createElement("hr");
-    formSeparator.classList.add("form-separator");
+        // add a separator for the form
+        const formSeparator = document.createElement("hr");
+        formSeparator.classList.add("form-separator");
 
         // Create a submit button
         const submitButton = document.createElement("button");
@@ -342,14 +343,61 @@ imageUploaButton.addEventListener("click", () => {
         // Prevent the default action of the form
         submitButton.addEventListener("click", (event) => {
             event.preventDefault();
-            if (titleInput.value === "" || categorySelect.value === "") {
-                alert("Informations manquantes");
+
+        // Check if the title, the category and the image are not empty and remove the error messages if they are
+            if (titleInput.value === "") {
+                const existingErrorMessage = document.querySelector(".title-error-message");
+                if (existingErrorMessage) {
+                    existingErrorMessage.remove();
+                }
+                const errorMessage = document.createElement("p");
+                errorMessage.textContent = "Titre manquant";
+                errorMessage.style.color = "red";
+                errorMessage.classList.add("title-error-message");
+                titleParagraph.insertAdjacentElement("afterend", errorMessage);
             } else {
+                const existingErrorMessage = document.querySelector(".title-error-message");
+                if (existingErrorMessage) {
+                    existingErrorMessage.remove();
+                }
+            }
+
+            if (categorySelect.value === "") {
+                const existingErrorMessage = document.querySelector(".category-error-message");
+                if (existingErrorMessage) {
+                    existingErrorMessage.remove();
+                }
+                const errorMessage = document.createElement("p");
+                errorMessage.textContent = "Catégorie manquante";
+                errorMessage.style.color = "red";
+                errorMessage.classList.add("category-error-message");
+                categoryParagraph.insertAdjacentElement("afterend", errorMessage);
+            } else {
+                const existingErrorMessage = document.querySelector(".category-error-message");
+                if (existingErrorMessage) {
+                    existingErrorMessage.remove();
+                }
+            }
+
+            if (imageInput.files.length === 0) {
+                const existingErrorMessage = document.querySelector(".image-error-message");
+                if (existingErrorMessage) {
+                    existingErrorMessage.remove();
+                }
+                const errorMessage = document.createElement("p");
+                errorMessage.textContent = "Image manquante";
+                errorMessage.style.color = "red";
+                errorMessage.classList.add("image-error-message");
+                imageInput.insertAdjacentElement("afterend", errorMessage);
+            } else {
+                const existingErrorMessage = document.querySelector(".image-error-message");
+                if (existingErrorMessage) {
+                    existingErrorMessage.remove();
+                }
                 console.log("You tried to add an image with title: " + titleInput.value + " and category: " + categorySelect.value);
             }
         });
     });
-
 
     // Add event listener to the close button to close the modal when clicked
     closeButton.addEventListener("click", closeModal);
