@@ -328,7 +328,7 @@ footer nav ul {
 	margin: 15% auto;
 	padding: 20px;
 	width: 30%; 
-	height: 50%;
+	height: 55%;
 	overflow: auto;
 	border-radius: 10px;
 	z-index: 2;
@@ -402,12 +402,17 @@ hr {
 	color: #1D6154;
 }
 
+.mini-img {
+	position: relative;
+	width: 100%;
+}
 .delete-button {
+	display: block;
 	position: absolute;
+	top: 0;
+	right: 0;
 	z-index: 5;
-	transform: translate(-140%, 30%);
 	padding: 3px;
-	float: 	right;
 	background-color: #000000;
 	color: #FFFFFF;
 	border: 1px solid #000000;
