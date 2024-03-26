@@ -160,7 +160,8 @@ function openModal() {
             miniImg.classList.add("mini-img");
         const imageElement = document.createElement("img");
             imageElement.src = work.imageUrl;
-            imageElement.alt = work.title;        
+            imageElement.alt = work.title;
+            imageElement.id = work.id;        
         const deleteButton = document.createElement("button");
             deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
             deleteButton.classList.add("delete-button");
@@ -187,9 +188,31 @@ function openModal() {
 
     //Add event listener to conole.log "you tried to delete an image" when clicking on the delete button
     const deleteButtons = document.querySelectorAll(".delete-button");  
+    const token = sessionStorage.getItem("token");
     deleteButtons.forEach(deleteButton => {
-        deleteButton.addEventListener("click", () => {
-            console.log("You tried to delete the image");
+        deleteButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            const workId = deleteButton.parentNode.firstChild.id;
+            
+            // Display a confirmation dialog before deleting the work
+            if (confirm("Are you sure you want to delete this work?")) {
+                fetch(`http://localhost:5678/api/works/${workId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer: ' + token
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Work deleted successfully");
+                    } else {
+                        console.log("Failed to delete work");
+                    }
+                })
+                .catch(error => {
+                    console.log("An error occurred while deleting the work:", error);
+                });
+            }
         });
     });
 
@@ -232,6 +255,7 @@ function openModal() {
         // Create a form element
         const form = document.createElement("form");
         form.classList.add("add-image-form");
+        form.id = "add-image-form";
         // Create an input for uploading an image
         const imageUpload = document.createElement("div");
         imageUpload.classList.add("image-upload");
@@ -253,10 +277,23 @@ function openModal() {
         const imageInput = document.createElement("input");
         imageInput.setAttribute("type", "file");
         imageInput.setAttribute("accept", "image/jpeg, image/png");
+        imageInput.setAttribute("max-size", "4MB"); // Limit the max size of uploaded image to 4MB
         imageInput.classList.add("image-input");
+        imageInput.required = true;
+
+        // Add event listener to the add image button to check the size of the selected image
+        imageInput.addEventListener("change", (event) => {
+            event.preventDefault();
+            const file = event.target.files[0];
+            if (file.size > 4 * 1024 * 1024) {
+            alert("Image size exceeds the limit of 4MB");
+            imageInput.value = ""; // Clear the selected image
+            }
+        });
         
         // add eventListener to the imageUploadButton to trigger the imageInput without clicking on it
-        imageUploaButton.addEventListener("click", () => {
+        imageUploaButton.addEventListener("click", (event) => {
+            event.preventDefault();
             imageInput.click();
         });
 
@@ -280,12 +317,11 @@ function openModal() {
         titleInput.classList.add("title-input");
         titleInput.setAttribute("id", "title");
         titleInput.setAttribute("name", "title");
-        titleInput.setAttribute("maxlength", "50");
         titleInput.setAttribute("minlength", "3");
-        titleInput.setAttribute("size", "50");
         titleInput.setAttribute("autocomplete", "off");
-        titleInput.setAttribute("autofocus", "autofocus");
         titleInput.setAttribute("type", "text");
+        titleInput.required = true;
+
 
         // create a paragraph element
         const titleParagraph = document.createElement("p");
@@ -302,6 +338,7 @@ function openModal() {
         categorySelect.classList.add("category-select");
         categorySelect.setAttribute("id", "category");
         categorySelect.setAttribute("name", "category");
+        categorySelect.required = true;
 
         // Create an option element for the default category
         const defaultOption = document.createElement("option");
@@ -340,12 +377,13 @@ function openModal() {
         form.appendChild(submitButton);
         // Append the form to the modal content
         content.appendChild(form);
+
+
         // Prevent the default action of the form
         submitButton.addEventListener("click", (event) => {
             event.preventDefault();
-
         // Check if the title, the category and the image are not empty and remove the error messages if they are
-            if (titleInput.value === "") {
+        if (titleInput.value === "") {
                 const existingErrorMessage = document.querySelector(".title-error-message");
                 if (existingErrorMessage) {
                     existingErrorMessage.remove();
@@ -394,8 +432,8 @@ function openModal() {
                 if (existingErrorMessage) {
                     existingErrorMessage.remove();
                 }
-                console.log("You tried to add an image with title: " + titleInput.value + " and category: " + categorySelect.value);
             }
+            console.log("You tried to add an image without a title, a category or an image");
         });
     });
 
