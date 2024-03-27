@@ -342,17 +342,28 @@ function openModal() {
 
         // Create an option element for the default category
         const defaultOption = document.createElement("option");
-        defaultOption.setAttribute("value", "");
-        defaultOption.textContent = " ";
+        defaultOption.setAttribute("value", null);
+        defaultOption.textContent = "";
         categorySelect.appendChild(defaultOption);
-        // Create an option element for each category
-        categories.forEach(category => {
-            const option = document.createElement("option");
-            option.classList.add("category-option");
-            option.setAttribute("value", category.id);
-            option.textContent = category.name;
-            categorySelect.appendChild(option);
-        });
+        // Create an option element for each category from the API
+        fetch("http://localhost:5678/api/categories")
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(category => {
+                    const option = document.createElement("option");
+                    option.classList.add("category-option");
+                    option.setAttribute("value", category.id);
+                    option.setAttribute("id", category.id);
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                    categorySelect.setAttribute("id", option.id);
+                    categorySelect.setAttribute("name", option.value);
+                    categorySelect.addEventListener("change", () => {
+                        categorySelect.id = option.value;
+                        console.log(categorySelect.value);
+                    });
+                });
+            });
 
         // add a separator for the form
         const formSeparator = document.createElement("hr");
@@ -379,10 +390,13 @@ function openModal() {
         content.appendChild(form);
 
 
+
+
         // Prevent the default action of the form
         submitButton.addEventListener("click", (event) => {
             event.preventDefault();
-        // Check if the title, the category and the image are not empty and remove the error messages if they are
+        // Check if the title, the category and the image are not empty and remove the error messages if they are and prevent the form from being submitted
+
         if (titleInput.value === "") {
                 const existingErrorMessage = document.querySelector(".title-error-message");
                 if (existingErrorMessage) {
@@ -400,7 +414,7 @@ function openModal() {
                 }
             }
 
-            if (categorySelect.value === "") {
+            if (categorySelect.name === "") {
                 const existingErrorMessage = document.querySelector(".category-error-message");
                 if (existingErrorMessage) {
                     existingErrorMessage.remove();
@@ -433,7 +447,43 @@ function openModal() {
                     existingErrorMessage.remove();
                 }
             }
-            console.log("You tried to add an image without a title, a category or an image");
+
+            if (titleInput.value === "" || categorySelect.value === "" || imageInput.files.length === 0) {
+                return;
+            }
+
+            // Create headers for the request
+            const headers = new Headers();
+            headers.append('Authorization', 'Bearer ' + token);
+            headers.append('Accept', 'application/json');
+            // Create a new formData object
+            const formData = new FormData();
+            formData.append('title', titleInput.value);
+            // Get the category ID from the selected category
+            const selectedCategory = categorySelect.value;
+            formData.append('image', imageInput.files[0]);
+            formData.append('category', selectedCategory);
+
+            // Send a POST request to the server
+            fetch("http://localhost:5678/api/works", {
+                method: "POST",
+                headers: headers,
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(formData)
+                    console.log("Work added successfully:", data);
+                    // Reset the form after successful submission without refreshing the page
+                    
+                    form.reset();
+                    // Replace the preview image
+                    imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
+                })
+                .catch(error => {
+                    console.error("Error adding work:", error);
+                });
+
         });
     });
 
