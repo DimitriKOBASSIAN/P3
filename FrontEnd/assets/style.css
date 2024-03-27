@@ -176,7 +176,7 @@ a:hover:visited {
 }
 
 .button-filter:hover {
-    background-color: #B1663C;
+    background-color: #2a9985;
 	color: #FFFFFF;
 }
 
@@ -279,7 +279,7 @@ footer nav ul {
 }
 
 .btmlgn {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	right: 0;
 	padding-right: 3em;

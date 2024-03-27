@@ -309,6 +309,7 @@ function openModal() {
                 previewImage.src = e.target.result;
                 imageLabel.innerHTML = '';
                 imageLabel.appendChild(previewImage);
+                console.log(previewImage);
             };
             reader.readAsDataURL(file);
         });
@@ -388,9 +389,6 @@ function openModal() {
         form.appendChild(submitButton);
         // Append the form to the modal content
         content.appendChild(form);
-
-
-
 
         // Prevent the default action of the form
         submitButton.addEventListener("click", (event) => {
