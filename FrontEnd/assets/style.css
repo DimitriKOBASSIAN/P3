@@ -273,10 +273,13 @@ input[type="submit"]{
 }
 
 .footer-login {
-position:absolute;
-width: 50%;
-bottom: 0;
-padding-bottom: 10px;
+	position: fixed;
+	bottom: 0;
+	width: 50%;
+	padding-bottom: 10px;
+	margin: auto;
+	left: 0;
+	right: 0;
 }
 footer nav ul {
 	display: flex;
