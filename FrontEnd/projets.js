@@ -19,6 +19,8 @@ console.log(works)
     }
 console.log(categories);
 
+
+// geneerate the works cards in the gallery
 function generateWorks(works){
 
     for (let i = 0; i < works.length; i++) {
@@ -186,7 +188,7 @@ function openModal() {
     // Add the modal to the body
     document.body.appendChild(modal);
 
-    //Add event listener to conole.log "you tried to delete an image" when clicking on the delete button
+    //Add event listener to the delete button to delete the work when clicked
     const deleteButtons = document.querySelectorAll(".delete-button");  
     const token = sessionStorage.getItem("token");
     deleteButtons.forEach(deleteButton => {
@@ -223,9 +225,8 @@ function openModal() {
         }
     });
 
-    //add event listener to the add image button to console.log "you tried to add an image"
+    //add event listener to the add image button to open the form to add a new image
     addImageButton.addEventListener("click", () => {
-        console.log("Opening the page to add image");
         // Completely empty the modal content
         content.innerHTML = '';
         //add a back button to the modal content
@@ -252,7 +253,7 @@ function openModal() {
         modalTitleAdd.classList.add("modal-title");
         content.appendChild(modalTitleAdd);
         
-        // Create a form element
+        // Create a form element to add an work
         const form = document.createElement("form");
         form.classList.add("add-image-form");
         form.id = "add-image-form";
@@ -313,7 +314,7 @@ function openModal() {
             };
             reader.readAsDataURL(file);
         });
-        // create a title input
+        // create a title input to add a title to the image
         const titleInput = document.createElement("input");
         titleInput.classList.add("title-input");
         titleInput.setAttribute("id", "title");
@@ -324,7 +325,7 @@ function openModal() {
         titleInput.required = true;
 
 
-        // create a paragraph element
+        // create a paragraph element 
         const titleParagraph = document.createElement("p");
         titleParagraph.classList.add("title-paragraph");
         titleParagraph.textContent = "Titre";
@@ -334,7 +335,7 @@ function openModal() {
         const categoryParagraph = document.createElement("p");
         categoryParagraph.classList.add("category-paragraph");
         categoryParagraph.textContent = "Catégorie";
-        // Create a select element
+        // Create a select element for the category
         const categorySelect = document.createElement("select");
         categorySelect.classList.add("category-select");
         categorySelect.setAttribute("id", "category");
