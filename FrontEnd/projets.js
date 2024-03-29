@@ -343,7 +343,9 @@ function openModal() {
 
         // Create an option element for the default category
         const defaultOption = document.createElement("option");
-        defaultOption.setAttribute("value", null);
+        defaultOption.setAttribute("value", "");
+        defaultOption.setAttribute("name", "");
+        defaultOption.setAttribute("id", "");
         defaultOption.textContent = "";
         categorySelect.appendChild(defaultOption);
         // Create an option element for each category from the API
@@ -412,7 +414,7 @@ function openModal() {
                 }
             }
 
-            if (categorySelect.name === "") {
+            if (categorySelect.value === "") {
                 const existingErrorMessage = document.querySelector(".category-error-message");
                 if (existingErrorMessage) {
                     existingErrorMessage.remove();
@@ -453,7 +455,6 @@ function openModal() {
             // Create headers for the request
             const headers = new Headers();
             headers.append('Authorization', 'Bearer ' + token);
-            headers.append('Accept', 'application/json');
             // Create a new formData object
             const formData = new FormData();
             formData.append('title', titleInput.value);
@@ -466,21 +467,16 @@ function openModal() {
             fetch("http://localhost:5678/api/works", {
                 method: "POST",
                 headers: headers,
-                body: formData
+                body: formData,
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(formData)
                     console.log("Work added successfully:", data);
-                    // Reset the form after successful submission without refreshing the page
-                    
-                    form.reset();
-                    // Replace the preview image
-                    imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
                 })
                 .catch(error => {
                     console.error("Error adding work:", error);
                 });
+
 
         });
     });
@@ -503,4 +499,3 @@ function closeModal() {
 // Add event listener to the modifier link
 const modifierLink = document.querySelector(".modifier-link");
 modifierLink.addEventListener("click", openModal);
-
