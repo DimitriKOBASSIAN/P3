@@ -477,8 +477,6 @@ function openModal() {
                 .catch(error => {
                     console.error("Error adding work:", error);
                 });
-
-
         });
     });
 
