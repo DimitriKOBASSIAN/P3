@@ -582,3 +582,10 @@ hr {
 	background-color: #1D6154;
 	border: 1px solid #1D6154;
 }
+
+.success-message {
+	color: green;
+	font-size: 1em;
+	display: flex;
+	justify-content: center;
+}

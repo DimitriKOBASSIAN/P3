@@ -193,7 +193,6 @@ function openModal() {
     const token = sessionStorage.getItem("token");
     deleteButtons.forEach(deleteButton => {
         deleteButton.addEventListener("click", (event) => {
-            event.preventDefault();
             const workId = deleteButton.parentNode.firstChild.id;
             
             // Display a confirmation dialog before deleting the work
@@ -206,6 +205,8 @@ function openModal() {
                 })
                 .then(response => {
                     if (response.ok) {
+                        event.preventDefault();
+                        deleteButton.parentNode.remove();
                         console.log("Work deleted successfully");
                     } else {
                         console.log("Failed to delete work");
@@ -257,6 +258,7 @@ function openModal() {
         const form = document.createElement("form");
         form.classList.add("add-image-form");
         form.id = "add-image-form";
+        
         // Create an input for uploading an image
         const imageUpload = document.createElement("div");
         imageUpload.classList.add("image-upload");
@@ -397,7 +399,7 @@ function openModal() {
         submitButton.addEventListener("click", (event) => {
             event.preventDefault();
         // Check if the title, the category and the image are not empty and remove the error messages if they are and prevent the form from being submitted
-
+        
         if (titleInput.value === "") {
                 const existingErrorMessage = document.querySelector(".title-error-message");
                 if (existingErrorMessage) {
@@ -464,21 +466,42 @@ function openModal() {
             formData.append('image', imageInput.files[0]);
             formData.append('category', selectedCategory);
 
+            
             // Send a POST request to the server
-            fetch("http://localhost:5678/api/works", {
-                method: "POST",
-                headers: headers,
-                body: formData,
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Work added successfully:", data);
+                fetch("http://localhost:5678/api/works", {
+                    method: "POST",
+                    headers: headers,
+                    body: formData,
                 })
-                .catch(error => {
-                    console.error("Error adding work:", error);
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Work added successfully:", data);
+                        form.reset();
+                        // remove the preview image
+                        imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
+                        // Display a success message
+                        const successMessage = document.createElement("p");
+                        successMessage.classList.add("success-message");
+                        successMessage.textContent = "Work added successfully";
+                        content.appendChild(successMessage);
+                        // Remove the success message after 3 seconds
+                        setTimeout(() => {
+                            successMessage.remove();
+                        }, 3000);
+                    // reload the works in the gallery in the background
+                    fetch("http://localhost:5678/api/works")
+                        .then(response => response.json())
+                        .then(data => {
+                            works = data;
+                            console.log(works);
+                        })
+                    })
+                    .catch(error => {
+                        console.error("Error adding work:", error);
                 });
+            });
         });
-    });
+
 
     // Add event listener to the close button to close the modal when clicked
     closeButton.addEventListener("click", closeModal);
@@ -493,6 +516,8 @@ function closeModal() {
     // Remove the darken effect from the page
     const page = document.querySelector("body");
     page.classList.remove("darken");
+
+location.reload();
 }
 
 // Add event listener to the modifier link
