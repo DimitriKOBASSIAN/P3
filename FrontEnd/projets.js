@@ -278,6 +278,7 @@ function openModal() {
                         });
                     }
                 });
+                
             });
             content.appendChild(closeButton);
             content.appendChild(modalTitle);
