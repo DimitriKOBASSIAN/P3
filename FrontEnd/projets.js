@@ -238,11 +238,53 @@ function openModal() {
         // Add event listener to the back button to go back to the gallery
         backButton.addEventListener("click", () => {
             content.innerHTML = '';
+            gallery.innerHTML = '';
+            // refresh the the gallery
+            works.forEach(work => {
+                const miniImg = document.createElement("div");
+                miniImg.classList.add("mini-img");
+                const imageElement = document.createElement("img");
+                imageElement.src = work.imageUrl;
+                imageElement.alt = work.title;
+                imageElement.id = work.id;
+                const deleteButton = document.createElement("button");
+                deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+                deleteButton.classList.add("delete-button");
+                gallery.appendChild(miniImg);
+                miniImg.appendChild(imageElement);
+                miniImg.appendChild(deleteButton);
+                // Add event listener to the delete button to delete the work
+                deleteButton.addEventListener("click", (event) => {
+                    const workId = deleteButton.parentNode.firstChild.id;
+                    // Display a confirmation dialog before deleting the work
+                    if (confirm("Are you sure you want to delete this work?")) {
+                        fetch(`http://localhost:5678/api/works/${workId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': 'Bearer: ' + token
+                            }
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                event.preventDefault();
+                                deleteButton.parentNode.remove();
+                                console.log("Work deleted successfully");
+                            } else {
+                                console.log("Failed to delete work");
+                            }
+                        })
+                        .catch(error => {
+                            console.log("An error occurred while deleting the work:", error);
+                        });
+                    }
+                });
+            });
             content.appendChild(closeButton);
             content.appendChild(modalTitle);
             content.appendChild(gallery);
             content.appendChild(separator);
             content.appendChild(addImageButton);
+
         });
 
         // Add the close button to the modal content
