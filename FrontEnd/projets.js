@@ -1,6 +1,5 @@
 // Fetch works from the API and store them in the oeuvres variable
 let works;
-
 try {
     const reponse = await fetch('http://localhost:5678/api/works/');
     works = await reponse.json();
@@ -9,18 +8,18 @@ try {
 }
 console.log(works)
 
-    // fetch the categories from the API
-    let categories;
-    try {
-        const response = await fetch('http://localhost:5678/api/categories/');
-        categories = await response.json();
-    } catch (error) {
-        console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
-    }
+// fetch the categories from the API
+let categories;
+try {
+    const response = await fetch('http://localhost:5678/api/categories/');
+    categories = await response.json();
+} catch (error) {
+    console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
+}
 console.log(categories);
 
 
-// geneerate the works cards in the gallery
+// Create a function to generate the works cards in the gallery
 function generateWorks(works){
 
     for (let i = 0; i < works.length; i++) {
@@ -47,7 +46,6 @@ function generateWorks(works){
     }
     
 }
-
 generateWorks(works);
 
 // Function to filter works based on category
@@ -127,6 +125,35 @@ if (sessionStorage.getItem("token")) {
     document.querySelector('.mes-projets').appendChild(modifierLink);
 }
 
+// Function to delete a work
+function deleteWork(deleteButton, token) {
+    deleteButton.addEventListener("click", (event) => {
+        const workId = deleteButton.parentNode.firstChild.id;
+        
+        // Display a confirmation dialog before deleting the work
+        if (confirm("Are you sure you want to delete this work?")) {
+            fetch(`http://localhost:5678/api/works/${workId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer: ' + token
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    event.preventDefault();
+                    deleteButton.parentNode.remove();
+                    console.log("Work deleted successfully");
+                } else {
+                    console.log("Failed to delete work");
+                }
+            })
+            .catch(error => {
+                console.log("An error occurred while deleting the work:", error);
+            });
+        }
+    });
+}
+
 // Function to open the modal
 function openModal() {
     // Create the modal element
@@ -192,31 +219,7 @@ function openModal() {
     const deleteButtons = document.querySelectorAll(".delete-button");  
     const token = sessionStorage.getItem("token");
     deleteButtons.forEach(deleteButton => {
-        deleteButton.addEventListener("click", (event) => {
-            const workId = deleteButton.parentNode.firstChild.id;
-            
-            // Display a confirmation dialog before deleting the work
-            if (confirm("Are you sure you want to delete this work?")) {
-                fetch(`http://localhost:5678/api/works/${workId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': 'Bearer: ' + token
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        event.preventDefault();
-                        deleteButton.parentNode.remove();
-                        console.log("Work deleted successfully");
-                    } else {
-                        console.log("Failed to delete work");
-                    }
-                })
-                .catch(error => {
-                    console.log("An error occurred while deleting the work:", error);
-                });
-            }
-        });
+        deleteWork(deleteButton, token);
     });
 
     // Add event listener to close the modal when clicking outside of the modal-content
@@ -254,31 +257,7 @@ function openModal() {
                 miniImg.appendChild(imageElement);
                 miniImg.appendChild(deleteButton);
                 // Add event listener to the delete button to delete the work
-                deleteButton.addEventListener("click", (event) => {
-                    const workId = deleteButton.parentNode.firstChild.id;
-                    // Display a confirmation dialog before deleting the work
-                    if (confirm("Are you sure you want to delete this work?")) {
-                        fetch(`http://localhost:5678/api/works/${workId}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': 'Bearer: ' + token
-                            }
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                event.preventDefault();
-                                deleteButton.parentNode.remove();
-                                console.log("Work deleted successfully");
-                            } else {
-                                console.log("Failed to delete work");
-                            }
-                        })
-                        .catch(error => {
-                            console.log("An error occurred while deleting the work:", error);
-                        });
-                    }
-                });
-                
+                    deleteWork(deleteButton, token);
             });
             content.appendChild(closeButton);
             content.appendChild(modalTitle);
@@ -525,7 +504,7 @@ function openModal() {
                         // Display a success message
                         const successMessage = document.createElement("p");
                         successMessage.classList.add("success-message");
-                        successMessage.textContent = "Work added successfully";
+                        successMessage.textContent = "Le projet a été ajouté avec succès";
                         content.appendChild(successMessage);
                         // Remove the success message after 3 seconds
                         setTimeout(() => {
