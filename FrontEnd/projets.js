@@ -334,6 +334,8 @@ function openModal() {
                 previewImage.src = e.target.result;
                 imageLabel.innerHTML = '';
                 imageLabel.appendChild(previewImage);
+                imageParameter.style.display = "none";
+                imageUploaButton.style.display = "none";
                 console.log(previewImage);
             };
             reader.readAsDataURL(file);
@@ -499,8 +501,10 @@ function openModal() {
                     .then(data => {
                         console.log("Work added successfully:", data);
                         form.reset();
-                        // remove the preview image
+                        // remove the preview image and put back the button and the label
                         imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
+                        imageUploaButton.style.display = "flex" ;
+                        imageParameter.style.display = "flex";
                         // Display a success message
                         const successMessage = document.createElement("p");
                         successMessage.classList.add("success-message");
