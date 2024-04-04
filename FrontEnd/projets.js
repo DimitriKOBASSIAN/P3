@@ -154,6 +154,7 @@ function deleteWork(deleteButton, token) {
                     event.preventDefault();
                     deleteButton.parentNode.remove();
                     console.log("Work deleted successfully");
+                    // reload the works in the gallery in the background
                     fetchWorksAndUpdateGallery()
                 } else {
                     console.log("Failed to delete work");
