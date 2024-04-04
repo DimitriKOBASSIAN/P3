@@ -18,35 +18,34 @@ try {
 }
 console.log(categories);
 
-
+const gallery = document.querySelector(".gallery");
 // Create a function to generate the works cards in the gallery
-function generateWorks(works){
+function generateWorks(works, gallery){
 
     for (let i = 0; i < works.length; i++) {
 
         const figure = works[i];
         // Selecting the DOM element that will host the fiches
-        const sectionFiches = document.querySelector(".gallery");
 
         // Creating a tag dedicated to a figure
         const worksElement = document.createElement("figure");
 
         // Creating tags for the image, the title and the alt
-        sectionFiches.appendChild(worksElement);
+        gallery.appendChild(worksElement);
         const imageElement = document.createElement("img");
         imageElement.src = figure.imageUrl;
         imageElement.alt = figure.title;
         const nomElement = document.createElement("figcaption");
         nomElement.innerText = figure.title;
 
-        // Linking the article tag to the sectionFiches
-        sectionFiches.appendChild(worksElement);
+        // Linking the article tag to the gallery
+        gallery.appendChild(worksElement);
         worksElement.appendChild(imageElement);
         worksElement.appendChild(nomElement);
     }
     
 }
-generateWorks(works);
+generateWorks(works, gallery);
 
 // Function to filter works based on category
 function filterWorks(categoryId) {
@@ -124,7 +123,19 @@ if (sessionStorage.getItem("token")) {
     modifierLink.href = "#"; // Add the desired href for the link
     document.querySelector('.mes-projets').appendChild(modifierLink);
 }
-
+//Function to reload the works in the gallery
+function fetchWorksAndUpdateGallery() {
+    fetch('http://localhost:5678/api/works')
+        .then(response => response.json())
+        .then(works => {
+            // Clear the gallery
+            gallery.innerHTML = '';
+            generateWorks(works, gallery)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 // Function to delete a work
 function deleteWork(deleteButton, token) {
     deleteButton.addEventListener("click", (event) => {
@@ -143,6 +154,7 @@ function deleteWork(deleteButton, token) {
                     event.preventDefault();
                     deleteButton.parentNode.remove();
                     console.log("Work deleted successfully");
+                    fetchWorksAndUpdateGallery()
                 } else {
                     console.log("Failed to delete work");
                 }
@@ -514,13 +526,8 @@ function openModal() {
                         setTimeout(() => {
                             successMessage.remove();
                         }, 3000);
-                    // reload the works in the gallery in the background
-                    fetch("http://localhost:5678/api/works")
-                        .then(response => response.json())
-                        .then(data => {
-                            works = data;
-                            console.log(works);
-                        })
+                        // reload the works in the gallery in the background
+                        fetchWorksAndUpdateGallery()
                     })
                     .catch(error => {
                         console.error("Error adding work:", error);
@@ -542,8 +549,6 @@ function closeModal() {
     // Remove the darken effect from the page
     const page = document.querySelector("body");
     page.classList.remove("darken");
-
-location.reload();
 }
 
 // Add event listener to the modifier link
