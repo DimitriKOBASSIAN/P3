@@ -18,9 +18,9 @@ try {
 }
 console.log(categories);
 
-const gallery = document.querySelector(".gallery");
-// Create a function to generate the works cards in the gallery
-function generateWorks(works, gallery){
+const index = document.querySelector(".index");
+// Create a function to generate the works cards in the index
+function generateWorks(works, index){
 
     for (let i = 0; i < works.length; i++) {
 
@@ -31,37 +31,38 @@ function generateWorks(works, gallery){
         const worksElement = document.createElement("figure");
 
         // Creating tags for the image, the title and the alt
-        gallery.appendChild(worksElement);
+        index.appendChild(worksElement);
         const imageElement = document.createElement("img");
         imageElement.src = figure.imageUrl;
         imageElement.alt = figure.title;
         const nomElement = document.createElement("figcaption");
         nomElement.innerText = figure.title;
 
-        // Linking the article tag to the gallery
-        gallery.appendChild(worksElement);
+        // Linking the article tag to the index
+        index.appendChild(worksElement);
         worksElement.appendChild(imageElement);
         worksElement.appendChild(nomElement);
     }
     
 }
-generateWorks(works, gallery);
+generateWorks(works, index);
 
 // Function to filter works based on category
 function filterWorks(categoryId) {
     const filteredWorks = works.filter(function (work) {
         return work.categoryId === categoryId;
     });
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(filteredWorks);
+    const index = document.querySelector(".index");
+    index.innerHTML = "";
+    generateWorks(filteredWorks, index);
 }
 
 // All Filter
 const btnFilterAll = document.querySelector(".btn-filter-all");
 btnFilterAll.addEventListener("click", () => {
     const worksAll = works.filter(work => work.categoryId !== null);
-    document.querySelector(".gallery").innerHTML = "";
-    generateWorks(worksAll);
+    document.querySelector(".index").innerHTML = "";
+    generateWorks(worksAll, index);
 });
 
 // Objets Filter
@@ -123,19 +124,21 @@ if (sessionStorage.getItem("token")) {
     modifierLink.href = "#"; // Add the desired href for the link
     document.querySelector('.mes-projets').appendChild(modifierLink);
 }
-//Function to reload the works in the gallery
-function fetchWorksAndUpdateGallery() {
+//Function to reload the works in the index
+function fetchWorksAndUpdateIndex() {
     fetch('http://localhost:5678/api/works')
         .then(response => response.json())
         .then(works => {
-            // Clear the gallery
-            gallery.innerHTML = '';
-            generateWorks(works, gallery)
+            // Clear the index
+            index.innerHTML = '';
+            generateWorks(works, index)
         })
         .catch(error => {
             console.error('Error:', error);
         });
 }
+
+//function to fetch the works from the API
 // Function to delete a work
 function deleteWork(deleteButton, token) {
     deleteButton.addEventListener("click", (event) => {
@@ -154,8 +157,7 @@ function deleteWork(deleteButton, token) {
                     event.preventDefault();
                     deleteButton.parentNode.remove();
                     console.log("Work deleted successfully");
-                    // reload the works in the gallery in the background
-                    fetchWorksAndUpdateGallery()
+                    fetchWorksAndUpdateIndex()
                 } else {
                     console.log("Failed to delete work");
                 }
@@ -169,6 +171,16 @@ function deleteWork(deleteButton, token) {
 
 // Function to open the modal
 function openModal() {
+    // Fetch the works from the server and update the works variable
+    fetch('http://localhost:5678/api/works/')
+        .then(response => response.json())
+        .then(data => {
+            works = data;
+            // Code to open the modal and display the works...
+        })
+        .catch(error => {
+            console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
+        });
     // Create the modal element
     const modal = document.createElement("div");
     modal.classList.add("modal");
@@ -195,6 +207,9 @@ function openModal() {
     // Create the gallery element
     const gallery = document.createElement("div");
     gallery.classList.add("gallery-modal");
+
+    //clear the gallery before adding the works
+    gallery.innerHTML = ''; 
 
     // Loop through the works and create image elements with delete buttons
     works.forEach(work => {
@@ -238,6 +253,14 @@ function openModal() {
     // Add event listener to close the modal when clicking outside of the modal-content
     modal.addEventListener("click", (event) => {
         if (event.target === modal) {
+            fetch("http://localhost:5678/api/works")
+                .then(response => response.json())
+                .then(data => {
+                    works = data;
+                })
+                .catch(error => {
+                    console.error("Error fetching works:", error);
+                });
             closeModal();
         }
     });
@@ -255,8 +278,12 @@ function openModal() {
         backButton.addEventListener("click", () => {
             content.innerHTML = '';
             gallery.innerHTML = '';
-            // refresh the the gallery
-            works.forEach(work => {
+            // refresh the gallery
+            fetch("http://localhost:5678/api/works")
+            .then(response => response.json())
+            .then(data => {
+                const works = data;
+                works.forEach(work => {
                 const miniImg = document.createElement("div");
                 miniImg.classList.add("mini-img");
                 const imageElement = document.createElement("img");
@@ -270,14 +297,14 @@ function openModal() {
                 miniImg.appendChild(imageElement);
                 miniImg.appendChild(deleteButton);
                 // Add event listener to the delete button to delete the work
-                    deleteWork(deleteButton, token);
+                deleteWork(deleteButton, token);
+                });
             });
             content.appendChild(closeButton);
             content.appendChild(modalTitle);
             content.appendChild(gallery);
             content.appendChild(separator);
             content.appendChild(addImageButton);
-
         });
 
         // Add the close button to the modal content
@@ -527,8 +554,19 @@ function openModal() {
                         setTimeout(() => {
                             successMessage.remove();
                         }, 3000);
-                        // reload the works in the gallery in the background
-                        fetchWorksAndUpdateGallery()
+                        // reload the works in the gallery in the modal
+                        const fetchWorksAndUpdateGallery = () => {
+                            // Fetch the works from the server
+                            fetch("http://localhost:5678/api/works")
+                                .then(response => response.json())
+                                .catch(error => {
+                                    console.error("Error fetching works:", error);
+                                });
+                        };
+
+                        fetchWorksAndUpdateGallery();
+                        fetchWorksAndUpdateIndex();
+
                     })
                     .catch(error => {
                         console.error("Error adding work:", error);
@@ -539,6 +577,15 @@ function openModal() {
 
     // Add event listener to the close button to close the modal when clicked
     closeButton.addEventListener("click", closeModal);
+    // Add event listener to the close button to fetch the works when the modal is closed
+closeButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch('http://localhost:5678/api/works/');
+        works = await response.json();
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
+    }
+});
 }
 
 // Function to close the modal
@@ -546,6 +593,7 @@ function closeModal() {
     // Remove the modal element
     const modal = document.querySelector(".modal");
     modal.remove();
+    
 
     // Remove the darken effect from the page
     const page = document.querySelector("body");
