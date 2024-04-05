@@ -203,7 +203,7 @@ a:hover:visited {
 	color: #FFFFFF;
 }
 
-.gallery {
+.index {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -211,7 +211,7 @@ a:hover:visited {
 	grid-row-gap: 20px;
 }
 
-.gallery img {
+.index img {
 	width: 100%;
 }
 
