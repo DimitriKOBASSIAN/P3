@@ -18,6 +18,14 @@ try {
 }
 console.log(categories);
 
+function fetchWorks() {
+    fetch("http://localhost:5678/api/works")
+        .then(response => response.json())
+        .catch(error => {
+            console.error("Error fetching works:", error);
+        });
+}
+
 const index = document.querySelector(".index");
 // Create a function to generate the works cards in the index
 function generateWorks(works, index){
@@ -557,11 +565,7 @@ function openModal() {
                         // reload the works in the gallery in the modal
                         const fetchWorksAndUpdateGallery = () => {
                             // Fetch the works from the server
-                            fetch("http://localhost:5678/api/works")
-                                .then(response => response.json())
-                                .catch(error => {
-                                    console.error("Error fetching works:", error);
-                                });
+                            fetchWorks();
                         };
 
                         fetchWorksAndUpdateGallery();
@@ -579,12 +583,7 @@ function openModal() {
     closeButton.addEventListener("click", closeModal);
     // Add event listener to the close button to fetch the works when the modal is closed
 closeButton.addEventListener('click', async () => {
-    try {
-        const response = await fetch('http://localhost:5678/api/works/');
-        works = await response.json();
-    } catch (error) {
-        console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
-    }
+    fetchWorks();
 });
 }
 
