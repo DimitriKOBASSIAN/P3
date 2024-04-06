@@ -18,9 +18,13 @@ try {
 }
 console.log(categories);
 
+//function used to update the works
 function fetchWorks() {
     fetch("http://localhost:5678/api/works")
-        .then(response => response.json())
+                .then(response => response.json())
+                .then(data => {
+                    works = data;
+                })
         .catch(error => {
             console.error("Error fetching works:", error);
         });
@@ -165,6 +169,7 @@ function deleteWork(deleteButton, token) {
                     event.preventDefault();
                     deleteButton.parentNode.remove();
                     console.log("Work deleted successfully");
+                    fetchWorks();
                     fetchWorksAndUpdateIndex()
                 } else {
                     console.log("Failed to delete work");
@@ -179,12 +184,13 @@ function deleteWork(deleteButton, token) {
 
 // Function to open the modal
 function openModal() {
+    // update the works
+    fetchWorks();
     // Fetch the works from the server and update the works variable
     fetch('http://localhost:5678/api/works/')
         .then(response => response.json())
         .then(data => {
             works = data;
-            // Code to open the modal and display the works...
         })
         .catch(error => {
             console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
@@ -579,12 +585,14 @@ function openModal() {
         });
 
 
-    // Add event listener to the close button to close the modal when clicked
-    closeButton.addEventListener("click", closeModal);
+/*     // Add event listener to the close button to close the modal when clicked
+    closeButton.addEventListener("click", closeModal); */
     // Add event listener to the close button to fetch the works when the modal is closed
-closeButton.addEventListener('click', async () => {
-    fetchWorks();
-});
+    closeButton.addEventListener('click',  async () => {
+        await fetchWorks();
+        content.innerHTML = '';
+        closeModal();
+    });
 }
 
 // Function to close the modal
@@ -592,7 +600,6 @@ function closeModal() {
     // Remove the modal element
     const modal = document.querySelector(".modal");
     modal.remove();
-    
 
     // Remove the darken effect from the page
     const page = document.querySelector("body");
