@@ -563,9 +563,6 @@ function openModal() {
             });
         });
 
-
-/*     // Add event listener to the close button to close the modal when clicked
-    closeButton.addEventListener("click", closeModal); */
     // Add event listener to the close button to fetch the works when the modal is closed
     closeButton.addEventListener('click',  async () => {
         await fetchWorks();
