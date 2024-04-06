@@ -6,7 +6,7 @@ try {
 } catch (error) {
     console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
 }
-console.log(works)
+/* console.log(works) */
 
 // fetch the categories from the API
 let categories;
@@ -16,7 +16,7 @@ try {
 } catch (error) {
     console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
 }
-console.log(categories);
+/* console.log(categories); */
 
 //function used to update the works
 function fetchWorks() {
@@ -168,7 +168,7 @@ function deleteWork(deleteButton, token) {
                 if (response.ok) {
                     event.preventDefault();
                     deleteButton.parentNode.remove();
-                    console.log("Work deleted successfully");
+/*                     console.log("Work deleted successfully"); */
                     fetchWorks();
                     fetchWorksAndUpdateIndex()
                 } else {
@@ -186,15 +186,6 @@ function deleteWork(deleteButton, token) {
 function openModal() {
     // update the works
     fetchWorks();
-    // Fetch the works from the server and update the works variable
-    fetch('http://localhost:5678/api/works/')
-        .then(response => response.json())
-        .then(data => {
-            works = data;
-        })
-        .catch(error => {
-            console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
-        });
     // Create the modal element
     const modal = document.createElement("div");
     modal.classList.add("modal");
@@ -267,14 +258,7 @@ function openModal() {
     // Add event listener to close the modal when clicking outside of the modal-content
     modal.addEventListener("click", (event) => {
         if (event.target === modal) {
-            fetch("http://localhost:5678/api/works")
-                .then(response => response.json())
-                .then(data => {
-                    works = data;
-                })
-                .catch(error => {
-                    console.error("Error fetching works:", error);
-                });
+            fetchWorks();
             closeModal();
         }
     });
@@ -390,7 +374,7 @@ function openModal() {
                 imageLabel.appendChild(previewImage);
                 imageParameter.style.display = "none";
                 imageUploaButton.style.display = "none";
-                console.log(previewImage);
+                /* console.log(previewImage); */
             };
             reader.readAsDataURL(file);
         });
@@ -444,7 +428,7 @@ function openModal() {
                     categorySelect.setAttribute("name", option.value);
                     categorySelect.addEventListener("change", () => {
                         categorySelect.id = option.value;
-                        console.log(categorySelect.value);
+/*                         console.log(categorySelect.value); */
                     });
                 });
             });
@@ -553,7 +537,7 @@ function openModal() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log("Work added successfully:", data);
+                       /*  console.log("Work added successfully:", data); */
                         form.reset();
                         // remove the preview image and put back the button and the label
                         imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
