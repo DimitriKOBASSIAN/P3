@@ -569,12 +569,7 @@ function openModal() {
                             successMessage.remove();
                         }, 3000);
                         // reload the works in the gallery in the modal
-                        const fetchWorksAndUpdateGallery = () => {
-                            // Fetch the works from the server
-                            fetchWorks();
-                        };
-
-                        fetchWorksAndUpdateGallery();
+                        fetchWorks();
                         fetchWorksAndUpdateIndex();
 
                     })
