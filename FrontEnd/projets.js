@@ -4,7 +4,7 @@ try {
     const reponse = await fetch('http://localhost:5678/api/works/');
     works = await reponse.json();
 } catch (error) {
-    console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
+    console.error("Error fetching works:", error);
 }
 /* console.log(works) */
 
@@ -14,7 +14,7 @@ try {
     const response = await fetch('http://localhost:5678/api/categories/');
     categories = await response.json();
 } catch (error) {
-    console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
+    console.error("Error fetching categories:", error);
 }
 /* console.log(categories); */
 
@@ -146,7 +146,7 @@ function fetchWorksAndUpdateIndex() {
             generateWorks(works, index)
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error fetching works to update index:', error);
         });
 }
 
