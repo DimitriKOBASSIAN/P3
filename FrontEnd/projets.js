@@ -30,6 +30,20 @@ function fetchWorks() {
         });
 }
 
+//Function to reload the works in the index
+function fetchWorksAndUpdateIndex() {
+    fetch('http://localhost:5678/api/works')
+        .then(response => response.json())
+        .then(works => {
+            // Clear the index
+            index.innerHTML = '';
+            generateWorks(works, index)
+        })
+        .catch(error => {
+            console.error('Error fetching works to update index:', error);
+        });
+}
+
 const index = document.querySelector(".index");
 // Create a function to generate the works cards in the index
 function generateWorks(works, index){
@@ -57,6 +71,7 @@ function generateWorks(works, index){
     }
     
 }
+
 generateWorks(works, index);
 
 // Function to filter works based on category
@@ -136,21 +151,8 @@ if (sessionStorage.getItem("token")) {
     modifierLink.href = "#"; // Add the desired href for the link
     document.querySelector('.mes-projets').appendChild(modifierLink);
 }
-//Function to reload the works in the index
-function fetchWorksAndUpdateIndex() {
-    fetch('http://localhost:5678/api/works')
-        .then(response => response.json())
-        .then(works => {
-            // Clear the index
-            index.innerHTML = '';
-            generateWorks(works, index)
-        })
-        .catch(error => {
-            console.error('Error fetching works to update index:', error);
-        });
-}
 
-//function to fetch the works from the API
+
 // Function to delete a work
 function deleteWork(deleteButton, token) {
     deleteButton.addEventListener("click", (event) => {
@@ -469,7 +471,6 @@ function openModal() {
                 }
                 const errorMessage = document.createElement("p");
                 errorMessage.textContent = "Titre manquant";
-                errorMessage.style.color = "red";
                 errorMessage.classList.add("title-error-message");
                 titleParagraph.insertAdjacentElement("afterend", errorMessage);
             } else {
@@ -486,7 +487,6 @@ function openModal() {
                 }
                 const errorMessage = document.createElement("p");
                 errorMessage.textContent = "Catégorie manquante";
-                errorMessage.style.color = "red";
                 errorMessage.classList.add("category-error-message");
                 categoryParagraph.insertAdjacentElement("afterend", errorMessage);
             } else {
@@ -503,7 +503,6 @@ function openModal() {
                 }
                 const errorMessage = document.createElement("p");
                 errorMessage.textContent = "Image manquante";
-                errorMessage.style.color = "red";
                 errorMessage.classList.add("image-error-message");
                 imageInput.insertAdjacentElement("afterend", errorMessage);
             } else {
@@ -537,7 +536,7 @@ function openModal() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                       /*  console.log("Work added successfully:", data); */
+                        console.log("Work added successfully:", data); 
                         form.reset();
                         // remove the preview image and put back the button and the label
                         imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
