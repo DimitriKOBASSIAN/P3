@@ -1,10 +1,10 @@
-// Fetch works from the API and store them in the oeuvres variable
+// Fetch works from the API and store them in the works variable
 let works;
 try {
     const reponse = await fetch('http://localhost:5678/api/works/');
     works = await reponse.json();
 } catch (error) {
-    console.error("Une erreur s'est produite lors de la récupération des oeuvres depuis l'API:", error);
+    console.error("Error fetching works:", error);
 }
 /* console.log(works) */
 
@@ -14,7 +14,7 @@ try {
     const response = await fetch('http://localhost:5678/api/categories/');
     categories = await response.json();
 } catch (error) {
-    console.error("Une erreur s'est produite lors de la récupération des catégories depuis l'API:", error);
+    console.error("Error fetching categories:", error);
 }
 /* console.log(categories); */
 
@@ -27,6 +27,20 @@ function fetchWorks() {
                 })
         .catch(error => {
             console.error("Error fetching works:", error);
+        });
+}
+
+//Function to reload the works in the index
+function fetchWorksAndUpdateIndex() {
+    fetch('http://localhost:5678/api/works')
+        .then(response => response.json())
+        .then(works => {
+            // Clear the index
+            index.textContent = '';
+            generateWorks(works, index)
+        })
+        .catch(error => {
+            console.error('Error fetching works to update index:', error);
         });
 }
 
@@ -57,6 +71,7 @@ function generateWorks(works, index){
     }
     
 }
+
 generateWorks(works, index);
 
 // Function to filter works based on category
@@ -65,7 +80,7 @@ function filterWorks(categoryId) {
         return work.categoryId === categoryId;
     });
     const index = document.querySelector(".index");
-    index.innerHTML = "";
+    index.textContent = "";
     generateWorks(filteredWorks, index);
 }
 
@@ -73,7 +88,7 @@ function filterWorks(categoryId) {
 const btnFilterAll = document.querySelector(".btn-filter-all");
 btnFilterAll.addEventListener("click", () => {
     const worksAll = works.filter(work => work.categoryId !== null);
-    document.querySelector(".index").innerHTML = "";
+    document.querySelector(".index").textContent = "";
     generateWorks(worksAll, index);
 });
 
@@ -121,7 +136,11 @@ if (sessionStorage.getItem("token")) {
 
     // Create a new banner element
     let banner = document.createElement('div');
-    banner.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
+    const icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-pen-to-square");
+    const text = document.createTextNode(" Mode édition");
+    banner.appendChild(icon);
+    banner.appendChild(text);
     banner.classList.add('banner');
 
     // Add the banner to the top of the body
@@ -131,26 +150,17 @@ if (sessionStorage.getItem("token")) {
 // add a modifier link next to the Mes Projets title when the user is logged in
 if (sessionStorage.getItem("token")) {
     let modifierLink = document.createElement('a');
-    modifierLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Modifier';
+    const icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-pen-to-square");
+    const text = document.createTextNode(" Modifier");
+    modifierLink.appendChild(icon);
+    modifierLink.appendChild(text);
     modifierLink.classList.add('modifier-link');
     modifierLink.href = "#"; // Add the desired href for the link
     document.querySelector('.mes-projets').appendChild(modifierLink);
 }
-//Function to reload the works in the index
-function fetchWorksAndUpdateIndex() {
-    fetch('http://localhost:5678/api/works')
-        .then(response => response.json())
-        .then(works => {
-            // Clear the index
-            index.innerHTML = '';
-            generateWorks(works, index)
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
 
-//function to fetch the works from the API
+
 // Function to delete a work
 function deleteWork(deleteButton, token) {
     deleteButton.addEventListener("click", (event) => {
@@ -199,7 +209,9 @@ function openModal() {
 
     // Add a close button to the modal content
     const closeButton = document.createElement("button");
-    closeButton.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    const closeButtonIcon = document.createElement("i");
+    closeButtonIcon.classList.add("fa-solid", "fa-xmark");
+    closeButton.appendChild(closeButtonIcon);
     closeButton.classList.add("close-button");
     content.appendChild(closeButton);
 
@@ -214,7 +226,7 @@ function openModal() {
     gallery.classList.add("gallery-modal");
 
     //clear the gallery before adding the works
-    gallery.innerHTML = ''; 
+    gallery.textContent = ''; 
 
     // Loop through the works and create image elements with delete buttons
     works.forEach(work => {
@@ -225,7 +237,9 @@ function openModal() {
             imageElement.alt = work.title;
             imageElement.id = work.id;        
         const deleteButton = document.createElement("button");
-            deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+            const deleteButtonIcon = document.createElement("i");
+            deleteButtonIcon.classList.add("fa-solid", "fa-trash-can");
+            deleteButton.appendChild(deleteButtonIcon);
             deleteButton.classList.add("delete-button");
         gallery.appendChild(miniImg);
         miniImg.appendChild(imageElement);
@@ -266,16 +280,18 @@ function openModal() {
     //add event listener to the add image button to open the form to add a new image
     addImageButton.addEventListener("click", () => {
         // Completely empty the modal content
-        content.innerHTML = '';
+        content.textContent = '';
         //add a back button to the modal content
         const backButton = document.createElement("button");
-        backButton.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+        const backButtonIcon = document.createElement("i");
+        backButtonIcon.classList.add("fa-solid", "fa-arrow-left");
+        backButton.appendChild(backButtonIcon);
         backButton.classList.add("back-button");
         content.appendChild(backButton);
         // Add event listener to the back button to go back to the gallery
         backButton.addEventListener("click", () => {
-            content.innerHTML = '';
-            gallery.innerHTML = '';
+            content.textContent = '';
+            gallery.textContent = '';
             // refresh the gallery
             fetch("http://localhost:5678/api/works")
             .then(response => response.json())
@@ -289,7 +305,7 @@ function openModal() {
                 imageElement.alt = work.title;
                 imageElement.id = work.id;
                 const deleteButton = document.createElement("button");
-                deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+                deleteButton.appendChild(document.createElement("i")).classList.add("fa-solid", "fa-trash-can");
                 deleteButton.classList.add("delete-button");
                 gallery.appendChild(miniImg);
                 miniImg.appendChild(imageElement);
@@ -325,7 +341,9 @@ function openModal() {
         // Create a label for the image input
         const imageLabel = document.createElement("label");
         imageLabel.setAttribute("for", "image");
-        imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
+        const imageIcon = document.createElement("i");
+        imageIcon.classList.add("fa-regular", "fa-image");
+        imageLabel.appendChild(imageIcon);
         imageUpload.appendChild(imageLabel);
         // Create a button to add an image
         const imageUploaButton = document.createElement("button");
@@ -370,7 +388,7 @@ function openModal() {
                 const previewImage = document.createElement("img");
                 previewImage.classList.add("previewImg");
                 previewImage.src = e.target.result;
-                imageLabel.innerHTML = '';
+                imageLabel.textContent = '';
                 imageLabel.appendChild(previewImage);
                 imageParameter.style.display = "none";
                 imageUploaButton.style.display = "none";
@@ -469,7 +487,6 @@ function openModal() {
                 }
                 const errorMessage = document.createElement("p");
                 errorMessage.textContent = "Titre manquant";
-                errorMessage.style.color = "red";
                 errorMessage.classList.add("title-error-message");
                 titleParagraph.insertAdjacentElement("afterend", errorMessage);
             } else {
@@ -486,7 +503,6 @@ function openModal() {
                 }
                 const errorMessage = document.createElement("p");
                 errorMessage.textContent = "Catégorie manquante";
-                errorMessage.style.color = "red";
                 errorMessage.classList.add("category-error-message");
                 categoryParagraph.insertAdjacentElement("afterend", errorMessage);
             } else {
@@ -503,7 +519,6 @@ function openModal() {
                 }
                 const errorMessage = document.createElement("p");
                 errorMessage.textContent = "Image manquante";
-                errorMessage.style.color = "red";
                 errorMessage.classList.add("image-error-message");
                 imageInput.insertAdjacentElement("afterend", errorMessage);
             } else {
@@ -537,10 +552,13 @@ function openModal() {
                 })
                     .then(response => response.json())
                     .then(data => {
-                       /*  console.log("Work added successfully:", data); */
+                        console.log("Work added successfully:", data); 
                         form.reset();
                         // remove the preview image and put back the button and the label
-                        imageLabel.innerHTML = '<i class="fa-regular fa-image"></i>';
+                        const imageIcon = document.createElement("i");
+                        imageIcon.classList.add("fa-regular", "fa-image");
+                        imageLabel.textContent = "";
+                        imageLabel.appendChild(imageIcon);
                         imageUploaButton.style.display = "flex" ;
                         imageParameter.style.display = "flex";
                         // Display a success message
@@ -566,7 +584,7 @@ function openModal() {
     // Add event listener to the close button to fetch the works when the modal is closed
     closeButton.addEventListener('click',  async () => {
         await fetchWorks();
-        content.innerHTML = '';
+        content.textContent = '';
         closeModal();
     });
 }
