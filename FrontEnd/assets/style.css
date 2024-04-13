@@ -414,7 +414,7 @@ hr {
 .button-addimg {
 	display: flex;
 	align-items: center;
-	justify-content: center; /* Add this line */
+	justify-content: center;
 	height: 36px;
 	background-color: #1D6154;
 	border: 1px solid #1D6154;
@@ -505,7 +505,7 @@ hr {
 .image-upload-button {
 	display: flex;
 	align-items: center;
-	justify-content: center; /* Add this line */
+	justify-content: center; 
 	height: 36px;
 	background-color: #B9C5CC	;
 	border: 1px solid #B9C5CC	;
