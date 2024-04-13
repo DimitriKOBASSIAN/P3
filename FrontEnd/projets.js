@@ -69,7 +69,6 @@ function generateWorks(works, index){
         worksElement.appendChild(imageElement);
         worksElement.appendChild(nomElement);
     }
-    
 }
 
 generateWorks(works, index);
@@ -310,7 +309,7 @@ function openModal() {
                 gallery.appendChild(miniImg);
                 miniImg.appendChild(imageElement);
                 miniImg.appendChild(deleteButton);
-                // Add event listener to the delete button to delete the work
+                // calling the deleteWork function when clicking button to delete the work
                 deleteWork(deleteButton, token);
                 });
             });
